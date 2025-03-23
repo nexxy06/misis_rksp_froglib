@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лягушки</title>
+    <meta name="keywords" content="РКСП, примеры верстки, html">
+    <link rel="stylesheet" href="../static/style.css"> <!-- Подключение CSS файла -->
+</head>
+<body>
+    <header>
+        <h1>Фото лягушек</h1>
+        <nav>
+            <ul>
+                <li><a href="#about">О сайте</a></li>
+                <li><a href="#images">Фото</a></li>
+                <li><a href="#registration">Обратная связь</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="about">
+            <h2>О сайте</h2>
+            <p>На сайте пока что будут фото лягушек</p>
+            <table>
+                <tr>
+                    <th>Название</th>
+                    <th>Описание</th>
+                </tr>
+                <tr>
+                    <td>Вид1</td>
+                    <td>Coming soon</td>
+                </tr>
+                <tr>
+                    <td>Вид2</td>
+                    <td>Coming soon</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="images">
+            <h2>Изображения</h2>
+            <div class="image-container">
+                <img src="../static/images/large-image.png" alt="Большое изображение">
+                <div class="small-images">
+                    <img src="../static/images/small-image1.png" alt="Маленькое изображение 1" class="small-image1">
+                    <img src="../static/images/small-image1.png" alt="Маленькое изображение 2" class="small-image2">
+                    <img src="../static/images/small-image1.png" alt="Маленькое изображение 3" class="small-image3">
+                </div>
+            </div>
+        </section>
+
+        <section id="registration">
+            <h2>Обратная связь</h2>
+            <form action="#" method="post">
+                <label for="name">Имя:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="phone">Телефон:</label>
+                <input type="tel" id="phone" name="phone" required>
+
+                <button type="submit">Отправить</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="../static/javascript.js"></script> <!-- Подключение JavaScript файла -->
+</body>
+</html>
