@@ -1,0 +1,99 @@
+/* ШПОРГАЛКА (НЕ РАБОТАЕТ)*/
+/* ШПОРГАЛКА (НЕ РАБОТАЕТ)*/
+/* ШПОРГАЛКА (НЕ РАБОТАЕТ)*/
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #298936; /* Темно-зеленый фон */
+    color: white; /* Белый текст */
+    padding: 20px 0;
+    text-align: center;
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+}
+
+main {
+    padding: 20px;
+}
+
+form {
+    margin: 20px 0;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.image-container {
+    position: relative; /* Относительное позиционирование для контейнера */
+    width: 50%; /* Ширина контейнера */
+    max-width: 600px; /* Максимальная ширина для большого изображения */
+    margin: auto; /* Центрирование контейнера */
+    margin-bottom: 20px; /* Отступ снизу, чтобы избежать наложения на другие секции */
+}
+
+.image-container img {
+    width: 100%; /* Ширина большого изображения */
+    height: 100%; /* Автоматическая высота */
+    display: block; /* Убираем лишние отступы */
+}
+
+.small-images {
+    position: absolute; /* Абсолютное позиционирование для мелких изображений */
+    top: 0; /* Позиционируем относительно .image-container */
+    left: 0;
+    width: 100%; /* Ширина контейнера для мелких изображений */
+    height: 100%; /* Высота контейнера для мелких изображений */
+}
+
+.small-images img {
+    position: absolute; /* Абсолютное позиционирование для каждого мелкого изображения */
+    width: 100px; /* Ширина мелких изображений */
+    height: auto; /* Автоматическая высота */
+    z-index: 2; /* Мелкие изображения поверх большого */
+}
+
+/* Пример позиционирования мелких изображений */
+.small-image1 {
+    top: 10%; /* Позиция сверху */
+    left: 10%; /* Позиция слева */
+}
+
+.small-image2 {
+    top: 30%; /* Позиция сверху */
+    left: 30%; /* Позиция слева */
+}
+
+.small-image3 {
+    top: 50%; /* Позиция сверху */
+    left: 50%; /* Позиция слева */
+}
+
+.contacts {
+    position: relative; /* Относительное позиционирование для текста */
+    z-index: 3; /* Текст поверх всех изображений */
+    background-color: rgba(255, 255, 255, 0.8); /* Фон для лучшей читаемости */
+    padding: 10px; /* Отступы внутри текстового блока */
+    border-radius: 5px; /* Скругление углов */
+    font-size: 18px;
+    text-align: center; /* Центрирование текста */
+    margin-top: 20px; /* Отступ сверху */
+}
