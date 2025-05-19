@@ -1,0 +1,53 @@
+.frog-detail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.back-button {
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.frog-title {
+  color: #2E8B57;
+  margin-bottom: 20px;
+}
+
+.frog-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.frog-description {
+  line-height: 1.6;
+  color: #333;
+}
+
+.frog-description h1,
+.frog-description h2,
+.frog-description h3 {
+  color: #2E8B57;
+  margin: 20px 0 10px 0;
+}
+
+.frog-description p {
+  margin: 10px 0;
+}
+
+.frog-description a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+
+.frog-description a:hover {
+  text-decoration: underline;
+}

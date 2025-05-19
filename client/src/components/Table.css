@@ -24,6 +24,33 @@ nav a {
     color: #fff;
     text-decoration: none;
 }
+.search-container {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.search-input {
+  padding: 10px 15px;
+  width: 300px;
+  max-width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.search-input:focus {
+  border-color: #4CAF50;
+}
+
+.no-results {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-size: 18px;
+}
+
 .frog-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Два столбца */
@@ -40,7 +67,12 @@ nav a {
 }
 
 .frog-card img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 5px;
+  max-width: 100%;
+  max-height: 300px;
+  width: auto;
+  height: auto;
+  object-fit: contain; /* Сохраняет пропорции, не обрезает */
+  display: block;
+  margin: 0 auto;
+  border-radius: 5px;
 }

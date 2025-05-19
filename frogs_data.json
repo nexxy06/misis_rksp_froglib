@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "image": "/static/images/1image.jpg",
+    "title": "Лягушка 1",
+    "description": "<h1>Краткое описание лягушки 1.</h1> Обитает в тропических лесах.",
+    "habitat": "Австралия"
+  },
+  {
+    "id": 2,
+    "image": "/static/images/2image.jpg",
+    "title": "Лягушка 2",
+    "description": "Краткое описание лягушки 2. Ядовитый вид.",
+    "habitat": "Индонезия"
+  }
+]
