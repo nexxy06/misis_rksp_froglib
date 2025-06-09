@@ -13,6 +13,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
 
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
+
 def load_frogs_data():
     """Загружает данные о лягушках из JSON-файла"""
     try:
@@ -37,19 +38,21 @@ def load_frogs_data():
             },
         ]
 
+
 def save_frogs_data(data):
     """Сохраняет данные в JSON-файл"""
     with open(app.config['DATA_FILE'], 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+
 def get_next_image_number():
     """Получает следующий номер для изображения"""
     upload_path = Path(app.config['UPLOAD_FOLDER'])
     existing_files = list(upload_path.glob('*image.*'))
-    
+
     if not existing_files:
         return 1
-    
+
     numbers = []
     for file in existing_files:
         try:
@@ -57,13 +60,14 @@ def get_next_image_number():
             numbers.append(num)
         except ValueError:
             continue
-    
+
     return max(numbers) + 1 if numbers else 1
+
 
 @app.route('/api/upload', methods=['POST', 'OPTIONS'])
 def upload_file():
     if request.method == 'OPTIONS':
-        return jsonify({}), 200
+        return jsonify({"success": "Загружено"}), 200
 
     if 'photo' not in request.files:
         return jsonify({"error": "Фото не загружено"}), 400
@@ -74,7 +78,7 @@ def upload_file():
 
     # Загружаем текущие данные
     frogs_data = load_frogs_data()
-    
+
     next_num = get_next_image_number()
     file_ext = os.path.splitext(file.filename)[1]
     filename = f"{next_num}image{file_ext}"
@@ -98,9 +102,11 @@ def upload_file():
         "data": new_frog
     }), 200
 
+
 @app.route('/api/frogs', methods=['GET'])
 def get_frogs():
     return jsonify(load_frogs_data())
+
 
 @app.route('/api/frogs/<int:frog_id>', methods=['GET'])
 def get_frog(frog_id):
@@ -110,10 +116,12 @@ def get_frog(frog_id):
         return jsonify(frog)
     return jsonify({"error": "Лягушка не найдена"}), 404
 
+
 @app.route('/static/images/<filename>')
 def serve_image(filename):
     print("", filename)
     return send_from_directory('../uploads/', filename)
+
 
 if __name__ == '__main__':
     # Инициализация файла с данными при первом запуске
