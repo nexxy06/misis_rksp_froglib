@@ -30,7 +30,7 @@ function Header() {
       <h1>Froglib</h1>
       <nav>
         <ul>
-          <li><Link to="/">О лягушках</Link></li>
+          <li><Link to="/">О сайте</Link></li>
           {/* <li><Link to="/frogs/:id">Фото</Link></li> */}
           <li><Link to="/table">Статьи</Link></li>
           <li><Link to="/registration">Добавить статью</Link></li>
