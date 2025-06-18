@@ -3,7 +3,7 @@
 
 
 Ссылка на отчёт:  
-https://docs.google.com/document/d/1CfIJ6FMg4xOg6G-3JZ5mLq3Pzsc1vlt4uvaDjqkzUbg/edit?usp=sharing
+https://drive.google.com/file/d/1Xe7yKYI9nzQvb8NcMD064kGCD9-BKZGz/view?usp=sharing
 
 Запустить приложение:
 1. В папке server запускаем main.py
