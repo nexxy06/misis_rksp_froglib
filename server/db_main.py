@@ -27,44 +27,45 @@ def get_db_connection():
     """Создает соединение с базой данных"""
     try:
         conn = psycopg2.connect(
-            host=app.config['DATABASE_CONFIG']['host'],
-            database=app.config['DATABASE_CONFIG']['database'],
-            user=app.config['DATABASE_CONFIG']['user'],
-            password=app.config['DATABASE_CONFIG']['password'],
-            port=app.config['DATABASE_CONFIG']['port']
+            host=app.config["DATABASE_CONFIG"]["host"],
+            database=app.config["DATABASE_CONFIG"]["database"],
+            user=app.config["DATABASE_CONFIG"]["user"],
+            password=app.config["DATABASE_CONFIG"]["password"],
+            port=app.config["DATABASE_CONFIG"]["port"],
         )
         return conn
     except Exception as e:
         print(f"Ошибка подключения к БД: {e}")
         raise
 
+
 def create_database_if_not_exists():
     """Создает базу данных если она не существует"""
     try:
         # Подключаемся к базе данных postgres по умолчанию
         conn = psycopg2.connect(
-            host=app.config['DATABASE_CONFIG']['host'],
-            database='postgres',  # подключаемся к стандартной БД
-            user=app.config['DATABASE_CONFIG']['user'],
-            password=app.config['DATABASE_CONFIG']['password'],
-            port=app.config['DATABASE_CONFIG']['port']
+            host=app.config["DATABASE_CONFIG"]["host"],
+            database="postgres",  # подключаемся к стандартной БД
+            user=app.config["DATABASE_CONFIG"]["user"],
+            password=app.config["DATABASE_CONFIG"]["password"],
+            port=app.config["DATABASE_CONFIG"]["port"],
         )
         conn.autocommit = True  # Важно для создания БД
         cur = conn.cursor()
-        
+
         # Проверяем существование базы данных
         cur.execute("SELECT 1 FROM pg_catalog.pg_database WHERE datname = 'frogs_db'")
         exists = cur.fetchone()
-        
+
         if not exists:
-            cur.execute('CREATE DATABASE frogs_db')
+            cur.execute("CREATE DATABASE frogs_db")
             print("База данных frogs_db создана")
         else:
             print("База данных frogs_db уже существует")
-        
+
         cur.close()
         conn.close()
-        
+
     except Exception as e:
         print(f"Ошибка при создании базы данных: {e}")
 
@@ -74,13 +75,14 @@ def init_database():
     try:
         # Сначала создаем базу данных если нужно
         create_database_if_not_exists()
-        
+
         # Теперь подключаемся к нашей базе данных
         conn = get_db_connection()
         cur = conn.cursor()
-        
+
         # Создаем таблицу для хранения данных о лягушках
-        cur.execute('''
+        cur.execute(
+            """
             CREATE TABLE IF NOT EXISTS frogs (
                 id SERIAL PRIMARY KEY,
                 image VARCHAR(255) NOT NULL,
@@ -89,38 +91,50 @@ def init_database():
                 habitat VARCHAR(255),
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
-        ''')
-        
+        """
+        )
+
         # Проверяем, есть ли уже данные в таблице
-        cur.execute('SELECT COUNT(*) FROM frogs')
+        cur.execute("SELECT COUNT(*) FROM frogs")
         count = cur.fetchone()[0]
-        
+
         # Если таблица пустая, добавляем начальные данные
         if count == 0:
             initial_data = [
-                ('/static/images/1image.jpg', 'Лягушка 1', 
-                 '<h1>Краткое описание лягушки 1.</h1> Обитает в тропических лесах.', 'Австралия'),
-                ('/static/images/2image.jpg', 'Лягушка 2', 
-                 'Краткое описание лягушки 2. Ядовитый вид.', 'Индонезия')
+                (
+                    "/static/images/1image.jpg",
+                    "Лягушка 1",
+                    "<h1>Краткое описание лягушки 1.</h1> Обитает в тропических лесах.",
+                    "Австралия",
+                ),
+                (
+                    "/static/images/2image.jpg",
+                    "Лягушка 2",
+                    "Краткое описание лягушки 2. Ядовитый вид.",
+                    "Индонезия",
+                ),
             ]
-            
-            cur.executemany('''
+
+            cur.executemany(
+                """
                 INSERT INTO frogs (image, title, description, habitat)
                 VALUES (%s, %s, %s, %s)
-            ''', initial_data)
+            """,
+                initial_data,
+            )
             print("Начальные данные добавлены")
-        
+
         conn.commit()
         print("База данных инициализирована успешно")
-        
+
     except Exception as e:
         print(f"Ошибка инициализации БД: {e}")
-        if 'conn' in locals():
+        if "conn" in locals():
             conn.rollback()
     finally:
-        if 'cur' in locals():
+        if "cur" in locals():
             cur.close()
-        if 'conn' in locals():
+        if "conn" in locals():
             conn.close()
 
 
