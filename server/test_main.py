@@ -15,8 +15,8 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB
 app.config['DATABASE_CONFIG'] = {
     'host': 'localhost',
     'database': 'frogs_db',
-    'user': 'your_username',
-    'password': 'your_password',
+    'user': 'postgres',
+    'password': '12345678',
     'port': 5432
 }
 
@@ -40,39 +40,45 @@ def init_database():
     conn = get_db_connection()
     cur = conn.cursor()
     
-    # Создаем таблицу для хранения данных о лягушках
-    cur.execute('''
-        CREATE TABLE IF NOT EXISTS frogs (
-            id SERIAL PRIMARY KEY,
-            image VARCHAR(255) NOT NULL,
-            title VARCHAR(255) NOT NULL,
-            description TEXT,
-            habitat VARCHAR(255),
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    
-    # Проверяем, есть ли уже данные в таблице
-    cur.execute('SELECT COUNT(*) FROM frogs')
-    count = cur.fetchone()[0]
-    
-    # Если таблица пустая, добавляем начальные данные
-    if count == 0:
-        initial_data = [
-            (1, '/static/images/1image.jpg', 'Лягушка 1', 
-             '<h1>Краткое описание лягушки 1.</h1> Обитает в тропических лесах.', 'Австралия'),
-            (2, '/static/images/2image.jpg', 'Лягушка 2', 
-             'Краткое описание лягушки 2. Ядовитый вид.', 'Индонезия')
-        ]
+    try:
+        # Создаем таблицу для хранения данных о лягушках
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS frogs (
+                id SERIAL PRIMARY KEY,
+                image VARCHAR(255) NOT NULL,
+                title VARCHAR(255) NOT NULL,
+                description TEXT,
+                habitat VARCHAR(255),
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
         
-        cur.executemany('''
-            INSERT INTO frogs (id, image, title, description, habitat)
-            VALUES (%s, %s, %s, %s, %s)
-        ''', initial_data)
-    
-    conn.commit()
-    cur.close()
-    conn.close()
+        # Проверяем, есть ли уже данные в таблице
+        cur.execute('SELECT COUNT(*) FROM frogs')
+        count = cur.fetchone()[0]
+        
+        # Если таблица пустая, добавляем начальные данные
+        if count == 0:
+            initial_data = [
+                ('/static/images/1image.jpg', 'Лягушка 1', 
+                 '<h1>Краткое описание лягушки 1.</h1> Обитает в тропических лесах.', 'Австралия'),
+                ('/static/images/2image.jpg', 'Лягушка 2', 
+                 'Краткое описание лягушки 2. Ядовитый вид.', 'Индонезия')
+            ]
+            
+            cur.executemany('''
+                INSERT INTO frogs (image, title, description, habitat)
+                VALUES (%s, %s, %s, %s)
+            ''', initial_data)
+        
+        conn.commit()
+        
+    except Exception as e:
+        print(f"Ошибка инициализации БД: {e}")
+        conn.rollback()
+    finally:
+        cur.close()
+        conn.close()
 
 
 def load_frogs_data():
@@ -99,19 +105,24 @@ def save_frog_data(image_path, title, description, habitat):
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
     
-    cur.execute('''
-        INSERT INTO frogs (image, title, description, habitat)
-        VALUES (%s, %s, %s, %s)
-        RETURNING *
-    ''', (image_path, title, description, habitat))
-    
-    new_frog = cur.fetchone()
-    conn.commit()
-    
-    cur.close()
-    conn.close()
-    
-    return dict(new_frog) if new_frog else None
+    try:
+        cur.execute('''
+            INSERT INTO frogs (image, title, description, habitat)
+            VALUES (%s, %s, %s, %s)
+            RETURNING *
+        ''', (image_path, title, description, habitat))
+        
+        new_frog = cur.fetchone()
+        conn.commit()
+        
+        return dict(new_frog) if new_frog else None
+    except Exception as e:
+        conn.rollback()
+        print(f"Ошибка при сохранении: {e}")
+        return None
+    finally:
+        cur.close()
+        conn.close()
 
 
 def get_next_image_number():
@@ -133,6 +144,7 @@ def get_next_image_number():
     return max(numbers) + 1 if numbers else 1
 
 
+@app.route('/api/upload', methods=['POST', 'OPTIONS'])
 @app.route('/api/upload', methods=['POST', 'OPTIONS'])
 def upload_file():
     if request.method == 'OPTIONS':
@@ -159,6 +171,7 @@ def upload_file():
     )
 
     if new_frog:
+        # Сохраняем файл только если данные успешно сохранены в БД
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         return jsonify({
             "message": "Файл загружен!",
