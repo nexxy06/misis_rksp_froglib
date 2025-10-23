@@ -42,7 +42,6 @@ def get_db_connection():
 def create_database_if_not_exists():
     """Создает базу данных если она не существует"""
     try:
-        # Подключаемся к базе данных postgres по умолчанию
         conn = psycopg2.connect(
             host=app.config["DATABASE_CONFIG"]["host"],
             database="postgres",  # подключаемся к стандартной БД
@@ -50,10 +49,9 @@ def create_database_if_not_exists():
             password=app.config["DATABASE_CONFIG"]["password"],
             port=app.config["DATABASE_CONFIG"]["port"],
         )
-        conn.autocommit = True  # Важно для создания БД
+        conn.autocommit = True
         cur = conn.cursor()
 
-        # Проверяем существование базы данных
         cur.execute("SELECT 1 FROM pg_catalog.pg_database WHERE datname = 'frogs_db'")
         exists = cur.fetchone()
 
@@ -73,14 +71,11 @@ def create_database_if_not_exists():
 def init_database():
     """Инициализирует базу данных и создает таблицу если она не существует"""
     try:
-        # Сначала создаем базу данных если нужно
         create_database_if_not_exists()
 
-        # Теперь подключаемся к нашей базе данных
         conn = get_db_connection()
         cur = conn.cursor()
 
-        # Создаем таблицу для хранения данных о лягушках
         cur.execute(
             """
             CREATE TABLE IF NOT EXISTS frogs (
@@ -94,7 +89,6 @@ def init_database():
         """
         )
 
-        # Проверяем, есть ли уже данные в таблице
         cur.execute("SELECT COUNT(*) FROM frogs")
         count = cur.fetchone()[0]
 
@@ -139,14 +133,13 @@ def init_database():
 
 
 def load_frogs_data():
-    """Загружает данные о лягушках из базы данных"""
+    """Загружает данные из базы данных"""
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
     cur.execute("SELECT * FROM frogs ORDER BY id")
     frogs = cur.fetchall()
 
-    # Конвертируем в обычный словарь
     frogs_list = []
     for frog in frogs:
         frogs_list.append(dict(frog))
@@ -158,7 +151,7 @@ def load_frogs_data():
 
 
 def save_frog_data(image_path, title, description, habitat):
-    """Сохраняет данные о новой лягушке в базу данных"""
+    """Сохраняет данные о новой статье в базу данных"""
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
 
@@ -205,7 +198,6 @@ def get_next_image_number():
 
 
 @app.route("/api/upload", methods=["POST", "OPTIONS"])
-@app.route("/api/upload", methods=["POST", "OPTIONS"])
 def upload_file():
     if request.method == "OPTIONS":
         return jsonify({"success": "Загружено"}), 200
@@ -222,7 +214,6 @@ def upload_file():
     filename = f"{next_num}image{file_ext}"
     image_path = f"/static/images/{filename}"
 
-    # Сохраняем данные в PostgreSQL
     new_frog = save_frog_data(
         image_path=image_path,
         title=request.form.get("name", f"Лягушка {next_num}"),
@@ -231,7 +222,6 @@ def upload_file():
     )
 
     if new_frog:
-        # Сохраняем файл только если данные успешно сохранены в БД
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], filename))
         return jsonify({"message": "Файл загружен!", "data": new_frog}), 200
     else:
@@ -266,6 +256,5 @@ def serve_image(filename):
 
 
 if __name__ == "__main__":
-    # Инициализация базы данных при первом запуске
     init_database()
     app.run(debug=True, port=5000)
