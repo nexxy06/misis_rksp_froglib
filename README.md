@@ -6,7 +6,7 @@ This project is a web-based information system for publishing and viewing articl
 
 - **View Articles**: Browse and read all published articles about animals
 - **Easy Text Formatting**: Format article text using prepared CSS styles without coding knowledge
-- **Search Functionality**: Search articles by various criteria
+- **Search Functionality**: Search articles by name
 - **Image Support**: Upload and display PNG and JPG images with articles
 
 ## Installation
