@@ -1,3 +1,7 @@
+html {
+  overflow-y: scroll; /* Permanent scrollbar for entire page */
+}
+
 .App {
   text-align: center;
 }
