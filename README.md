@@ -28,11 +28,25 @@ This project is a web-based information system for publishing and viewing articl
     npm install
     cd ..
     ```
+
+4. **Db Configuration:**  
+    In ./server/db_main.py change the configuration for yourself
+    ```
+    app.config["DATABASE_CONFIG"] = {
+        "host": "localhost",
+        "database": "frogs_db",
+        "user": "postgres",
+        "password": "12345678",
+        "port": 5432,
+    }
+    ```
+
+
 ## Usage
 
 1. **Run the application**:
     ```sh
-    python3 ./server/main.py
+    python3 ./server/db_main.py
     ```
 
 2. **In a new terminal, start the React frontend:**
